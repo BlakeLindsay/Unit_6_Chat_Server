@@ -1,7 +1,7 @@
 {
   "name": "unit_6_chat_server",
   "version": "1.0.0",
-  "description": "Blake Lindsay",
+  "description": "Blake Lindsay, Irina Startseva",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
