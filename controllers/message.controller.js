@@ -10,6 +10,9 @@ function errorResponse(res, error) {
 	});
 };
 
+/**
+ * room is the id of the room, text is a string for the text of the message
+ */
 router.post("/message/:room/:text", validateSession, async (req, res) => {
 	try {
 		if (!req.params.room || !req.params.text || !req.user._id) {
@@ -37,6 +40,26 @@ router.post("/message/:room/:text", validateSession, async (req, res) => {
 	}
 });
 
+/**
+ * :room is the id of the room
+ */
+router.get("/message/:room", async (req, res) => {
+	try {
+		const messages = await Message.find({ room: req.params.id });
+
+		messages.length > 0 ?
+		res.status(200).json({messages})
+		:
+		res.status(404).json({message: "no messages found"});
+
+	} catch (error) {
+		errorResponse(res, error);
+	}
+});
+
+/**
+ * id is the id of the message to be deleted
+ */
 router.delete("/message/:id", validateSession, async (req, res) => {
 	try {
 		const { id } = req.params;
