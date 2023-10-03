@@ -1,6 +1,8 @@
 const router = require("express").Router();
 const Room = require("../models/room.model");
 const Message = require("../models/message.model");
+const validateSession = require('../middleware/validateSession');
+
 
 function errorResponse(res, error) {
 	res.status(500).json({
@@ -8,7 +10,7 @@ function errorResponse(res, error) {
 	});
 };
 
-router.post("/message/:room-:text", async (req, res) => {
+router.post("/message/:room/:text", validateSession, async (req, res) => {
 	try {
 		if (!req.params.room || !req.params.text || !req.user._id) {
 			throw new Error("something is wrong");
@@ -32,6 +34,27 @@ router.post("/message/:room-:text", async (req, res) => {
 
 	} catch (error) {
 		errorResponse(res, err);
+	}
+});
+
+router.delete("/message/:id", validateSession, async (req, res) => {
+	try {
+		const { id } = req.params;
+		const deleteMessage = await Message.deleteOne({
+			_id: id,
+			owner: req.user.id
+		});
+
+		if(deleteMessage.deleteCount) {
+			res.status(200).json({
+				message: 'message deleted'
+			});
+		} else {
+			throw new Error("could not delete message");
+		}
+
+	} catch (error) {
+		errorResponse(res, error);
 	}
 });
 
