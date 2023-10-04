@@ -41,7 +41,7 @@ router.post("/", validateSession, async (req, res) => {
  */
 router.get("/:room", async (req, res) => {
 	try {
-		const messages = await Message.find({ room: req.params.id });
+		const messages = await Message.find({ room: req.params.room });
 
 		messages.length > 0 ?
 		res.status(200).json({messages})
