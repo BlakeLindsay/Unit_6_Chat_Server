@@ -13,17 +13,13 @@ function errorResponse(res, error) {
 /**
  * room is the id of the room, text is a string for the text of the message
  */
-router.post("/message/:room/:text", validateSession, async (req, res) => {
+router.post("/", validateSession, async (req, res) => {
 	try {
-		if (!req.params.room || !req.params.text || !req.user._id) {
-			throw new Error("something is wrong");
-		}
-
-		const room = await Room.findOne({ _id: req.params.room });
+		const room = await Room.findOne({ _id: req.body.room });
 
 		const message = new Message({
 			date: Date(),
-			text: req.params.text,
+			text: req.body.text,
 			owner: req.user._id,
 			room: room._id
 		});
@@ -32,18 +28,18 @@ router.post("/message/:room/:text", validateSession, async (req, res) => {
 
 		res.status(200).json({
 			message: "message posted",
-			object: newMessage
+			newMessage
 		});
 
 	} catch (error) {
-		errorResponse(res, err);
+		errorResponse(res, error);
 	}
 });
 
 /**
  * :room is the id of the room
  */
-router.get("/message/:room", async (req, res) => {
+router.get("/:room", async (req, res) => {
 	try {
 		const messages = await Message.find({ room: req.params.id });
 
@@ -60,15 +56,16 @@ router.get("/message/:room", async (req, res) => {
 /**
  * id is the id of the message to be deleted
  */
-router.delete("/message/:id", validateSession, async (req, res) => {
+router.delete("/:id", validateSession, async (req, res) => {
 	try {
 		const { id } = req.params;
+		console.log(req.user);
 		const deleteMessage = await Message.deleteOne({
 			_id: id,
-			owner: req.user.id
+			owner: req.user._id
 		});
 
-		if(deleteMessage.deleteCount) {
+		if(deleteMessage.deletedCount) {
 			res.status(200).json({
 				message: 'message deleted'
 			});
