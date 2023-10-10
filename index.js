@@ -18,11 +18,10 @@ app.use(express.json());
 
 const users = require('./controllers/user.controller');
 const rooms = require('./controllers/room.controller');
-const rooms = require('./controllers/room.controller');
 const messages = require('./controllers/message.controller');
 
 app.use('/user', users);
 app.use('/room', rooms);
-//app.use('/message', messages);
+app.use('/message', messages);
 
 app.listen(PORT);
