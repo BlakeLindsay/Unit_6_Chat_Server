@@ -31,7 +31,7 @@ router.post("/new", validateSession, async(req, res) =>{
     });
     }
 catch(err){
-errorresponse(res, err);
+errorResponse(res, err);
 }
 });
 
