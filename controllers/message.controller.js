@@ -19,15 +19,13 @@ function errorResponse(res, error) {
 /**
  * room is the id of the room, text is a string for the text of the message
  */
-router.post("/", validateSession, async (req, res) => {
+router.post("/:room", validateSession, async (req, res) => {
 	try {
-		const room = await Room.findOne({ _id: req.body.room });
-
 		const message = new Message({
 			date: Date(),
 			text: req.body.text,
 			owner: req.user._id,
-			room: room._id
+			room: req.params.room
 		});
 
 		const newMessage = await message.save();
