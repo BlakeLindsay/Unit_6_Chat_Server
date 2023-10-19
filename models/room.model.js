@@ -7,8 +7,7 @@ const RoomSchema = new mongoose.Schema({
 		unique: true
 	},
 	description: {
-		type: String,
-		unique: true
+		type: String
 	},
 	messages: {
 		type: Array
